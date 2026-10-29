@@ -1,0 +1,21 @@
+[package]
+name = "update-me"
+author = ["Noticxs <noticxs@ametrine.cc>"]
+description = "Update your linux system easily, chose what updates and when it does."
+
+version = "0.1.0"
+edition = "2024"
+
+readme = "README.md"
+license = "GPL-3.0-or-later"
+
+include = [
+    "src/**/*",
+    "packaging/**/*",
+    "README.md",
+    "LICENSE",
+]
+
+[dependencies]
+clap = { version = "4.6.7", features = ["derive"] }
+clap_complete = "4.6.11"
