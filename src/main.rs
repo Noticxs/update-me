@@ -1,64 +1,12 @@
-use clap::CommandFactory;
-use clap::{Parser, ValueEnum};
-use clap_complete::{Shell, generate};
-use std::io;
+use clap::Parser;
+use clap_complete::Shell;
 use std::process::exit;
+use std::sync::{LazyLock, Mutex};
 
-#[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
-struct Args {
-    /// Specify shell you want autocompletion for
-    #[arg(short, long)]
-    completion: Option<String>,
+mod shell;
+use shell::{Args, OperatingSystems, PackageManagers, generate_completions, get_supported_shells};
 
-    /// Enable verbose mode
-    #[arg(short, long)]
-    verbose: bool,
-
-    /// Linux distrobution to update
-    #[arg(short, long)]
-    os: Option<OperatingSystems>,
-
-    /// Package manager to update
-    #[arg(short, long)]
-    pkg: Option<PackageManagers>,
-}
-
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
-#[value(rename_all = "lower")]
-enum OperatingSystems {
-    Gentoo,
-    Fedora,
-    Aeryn,
-    Debian,
-    Arch,
-}
-
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
-#[value(rename_all = "lower")]
-enum PackageManagers {
-    Emerge,
-    Dnf,
-    Moss,
-    Apt,
-    Pacman,
-}
-
-// Check for shell
-fn get_supported_shells() -> Vec<String> {
-    return vec![
-        String::from("fish"),
-        String::from("bash"),
-        String::from("zsh"),
-    ];
-}
-
-fn generate_completions(shell: Shell) {
-    let mut cmd = Args::command();
-    let bin_name = env!("CARGO_PKG_NAME");
-
-    generate(shell, &mut cmd, bin_name, &mut io::stdout());
-}
+static _SHOULD_ENCRYPT: LazyLock<Mutex<bool>> = LazyLock::new(|| Mutex::new(false));
 
 fn main() {
     // Get all arguments
@@ -87,6 +35,10 @@ fn main() {
 
         generate_completions(shell);
         exit(0);
+    }
+
+    if *&args.verbose {
+        println!("Enabling Verbose {}", &args.verbose);
     }
 
     // Check for operating system arguments
