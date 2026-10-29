@@ -2,6 +2,7 @@
 
 Update linux systems easy.
 
+## Install from source
 ```bash
 git clone https://github.com/Noticxs/update-me.git
 cd update-me
@@ -10,6 +11,8 @@ cargo build --release
 cargo install --path .
 ```
 
+
+## Install with cargo (not done yet btw)
 ```bash
 cargo install update-me
 ```
