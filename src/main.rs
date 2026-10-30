@@ -6,7 +6,8 @@ use std::sync::{LazyLock, Mutex};
 mod shell;
 use shell::{Args, OperatingSystems, PackageManagers, generate_completions, get_supported_shells};
 
-static _SHOULD_ENCRYPT: LazyLock<Mutex<bool>> = LazyLock::new(|| Mutex::new(false));
+static _VERBOSE: LazyLock<Mutex<bool>> = LazyLock::new(|| Mutex::new(false));
+static _COMMAND_STACK: LazyLock<Mutex<Vec<String>>> = LazyLock::new(|| Mutex::new(vec![]));
 
 fn main() {
     // Get all arguments
